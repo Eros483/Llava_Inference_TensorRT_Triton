@@ -95,34 +95,10 @@ async def run_batch(num_requests: int, prompts: List[str], images: List[str],
     
     if successful:
         latencies = [r["latency"] for r in successful]
-        print(f"\nLatency Stats:")
-        print(f"  Min: {min(latencies):.3f}s")
-        print(f"  Max: {max(latencies):.3f}s")
+
         print(f"  Avg: {sum(latencies)/len(latencies):.3f}s")
-        print(f"  Throughput: {len(successful)/total_time:.2f} req/s")
-        
-        start_times = [r["start_time"] for r in successful]
+
         end_times = [r["end_time"] for r in successful]
-        completion_spread = max(end_times) - min(end_times)
-        
-        print(f"\nBatching Analysis:")
-        print(f"  Completion spread: {completion_spread:.3f}s")
-        
-        if num_requests > 1:
-            avg_latency = sum(latencies) / len(latencies)
-            expected_sequential = avg_latency * num_requests
-            speedup = expected_sequential / total_time
-            
-            print(f"  Expected sequential: {expected_sequential:.3f}s")
-            print(f"  Actual time: {total_time:.3f}s")
-            print(f"  Speedup: {speedup:.2f}x")
-            
-            if speedup > 1.5:
-                print(f"  BATCHING IS WORKING! {speedup:.2f}x faster than sequential")
-            elif speedup > 1.1:
-                print(f"  Some batching benefit ({speedup:.2f}x)")
-            else:
-                print(f"  Limited batching detected")
     
     if failed:
         print(f"\nFailed Requests:")
